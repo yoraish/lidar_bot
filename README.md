@@ -249,13 +249,102 @@ We can control the robot from our laptop now! In separate terminal instances, ru
 
 To make our lives easier for the next time we run the teleop node, we can create a launch file!
 
+## 9. Launch files!
+
+Creating a launch file is pretty simple, and can be done following the documentation on ROS.org.
+In our case, we end up with the following launch file to launch all the necessary nodes for keyboard teleoperation.
+
+```
+<launch>
+  <node pkg="rosserial_arduino" type="serial_node.py" name="serial_arduino">
+    <param name="port" value="/dev/ttyACM0" />
+  </node>
+
+  <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keybord">  </node>
+
+
+</launch>
+```
+
+I have placed this launch file in the directory `~/catkin_ws/src/lidarbot/launch`. Don't forget to `catkin_make` and `source devel/setup.bash`  !
+
+We can now run the robot in a teleoperated mode with 
+
+`roslaunch lidarbot lidarbot_teleop.launch `
+
+## 9. Correcting angle offset.
+
+When I was designing the Lidar mount that I ended up 3D printing, I failed to look through the datasheet and design in in a way such that the "forward" direction of the Lidar would actually point forward. Let's correct that.
+
+Because of a lack of time, let's do a somewhat hack-y patch.
+
+Navigate to `/catkin_ws/src/ydlidar/sdk/src/CYdLidar.cpp`, and change the function `void CYdLidar::checkCalibrationAngle(const std::string &serialNumber) {` to the following. We are simply overriding the angle offset value provided by the Lidar model.
+
+```cpp
+void CYdLidar::checkCalibrationAngle(const std::string &serialNumber) {
+  m_AngleOffset = 0.0;
+  result_t ans;
+  offset_angle angle;
+  int retry = 0;
+  m_isAngleOffsetCorrected = false;
+
+  float override_offset_angle = 140.0;
+
+  while (retry < 2) {
+    ans = lidarPtr->getZeroOffsetAngle(angle);
+
+    if (IS_OK(ans)) {
+      if (angle.angle > 720 || angle.angle < -720) {
+        ans = lidarPtr->getZeroOffsetAngle(angle);
+
+        if (!IS_OK(ans)) {
+          continue;
+          retry++;
+        }
+      }
+
+      m_isAngleOffsetCorrected = (angle.angle != 720);
+      m_AngleOffset = angle.angle / 4.0;
+      printf("[YDLIDAR INFO] Successfully obtained the %s offset angle[%f] from the lidar[%s]\n"
+             , m_isAngleOffsetCorrected ? "corrected" : "uncorrrected", m_AngleOffset,
+             serialNumber.c_str());
+
+      std::cout << "Overriding offset angle to " << override_offset_angle << "\n";
+      m_AngleOffset  = override_offset_angle;
+      return;
+    }
+
+    retry++;
+  }
+```
+
+Great, our Lidar's arrow points forward now.
+
+## 10. Save a map.
+
+In separate terminals, run:
+
+`roslaunch lidarbot lidarbot_teleop.launch`
+
+`roslaunch ydlidar_ros lidar.launch `
+
+`roslaunch hector_slam_launch tutorial.launch `
+
+And open Rviz from another linux machine, if possible.
+
+Now, as you'll be driving around the space (slowly! We want the map to be built accurately, so no need to give it a hard time doing so.) you'll see a map starting to be build in real time, in Rviz. The lighter colors are empty space, and the dark ones are obstacles.
+
+When you think your map is sufficiently good, run the following:
+
+`rostopic pub syscommand std_msgs/String "savegeotiff"`
+
+This will save a .tif and a .tfw files in `~/catkin_ws/src/hector_slam/hector_geotiff/maps` directory.
+
+
 Next steps:
 
 
 Nexts: 
-* launch file for teleop
-* Calibrate lidar
-
 
 * Map the hallway.
 * Ask for trajectory from start to goal(rviz?) with nav_msgs and move_base
