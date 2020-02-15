@@ -1,7 +1,18 @@
 # Lidar+ROS+Raspberry Pi Robot
+
+![LidarBot](media/lidarbot.jpg)
+
 ## 1. Building a robot.
 ------
 This part is somewhat looser than the others. In a nutshell, find some motors, wheels, motor controllers, and some connecting materials. Throw them all at a wall and hope that the come together nicely. 
+
+I have used RobotShop.com's:
+* Scout platform
+* Slightly stronger motors than the one it ships with. (Something like [this](https://www.robotshop.com/en/ghm-13-spur-gear-head-motor.html).)
+* Cytron 10A 5-30V Dual Channel DC Motor Driver.
+* YDLIDAR G2 Lidar.
+* Raspberry Pi 3 Model B. (I could not install ROS on a Raspberry Pi 4 at this time, maybe you could!)
+![Building a Robot at night is cool](media/robot_table.jpg)
 
 ## 2. Installing ROS
 
@@ -73,6 +84,10 @@ I am using the YDLIDAR G2 for this build. The first step is to install the neces
 * Run `catkin_make` again.
 
 Test the lidar with `roslaunch ydlidar_ros lidar.launch`. Visualize the scans in Rviz, by adding the topic `/scan`. 
+
+It may look something like this! Background may vary :)
+
+![Lidar Sample](media/lidar.jpg)
 
 ## 6. ROS + Arduino; Getting them to talk to each other.
 As we know, the Raspberry Pi is the "brain" of our robot, perceiving the environment and planning in it. The Arduino, is simply used to control the motors of the robot. It doesn't do much thinking. So our goal here, is to get commands from the Raspberry Pi to the Arduino, so it'll be able to tell the motors how to move, accordingly. In high level, what we do is install *rosserial*, a ROS module that enables Arduino communication, on both the Raspberry Pi and the Arduino.
@@ -340,12 +355,18 @@ When you think your map is sufficiently good, run the following:
 
 This will save a .tif and a .tfw files in `~/catkin_ws/src/hector_slam/hector_geotiff/maps` directory.
 
+The map will look something like this:
 
-Next steps:
+<img src="media/map.png" width="200" height="400" />
+
+## Simple application, wall following.
+
+We are done setting up our robot! It is SMORT and can drive on its own, and sense its environment. I will be updating [this Github repository](https://github.com/yoraish/lidar_bot) with code for some fun applications. The first thing on there is a wall following ROS package! 
+
+Happy building!
 
 
-Nexts: 
+<!-- Nexts: 
 
-* Map the hallway.
 * Ask for trajectory from start to goal(rviz?) with nav_msgs and move_base
-* Ros Node on the Arduino to be the controller - follow the trajectory (could be some sort of pure pursuit with a "buffer"y feeling (doesn't have to hit poses exactly, has threshold)).
+* Ros Node on the Arduino to be the controller - follow the trajectory (could be some sort of pure pursuit with a "buffer"y feeling (doesn't have to hit poses exactly, has threshold)). -->
