@@ -38,8 +38,8 @@ void cmd_vel_cb(const geometry_msgs::Twist & msg) {
   // We only care about the linear x, and the rotational z.
   const float x = msg.linear.x;
   const float z_rotation = msg.angular.z;
-  int right_cmd = default_vel * min(1, max(z_rotation*1.5 + 1, -1));
-  int left_cmd =  default_vel * min(1, max(-z_rotation*1.5 + 1 , -1));
+  int right_cmd = x*default_vel * min(1, max(z_rotation*1.5 + 1, -1));
+  int left_cmd =  x*default_vel * min(1, max(-z_rotation*1.5 + 1 , -1));
   bool right_dir = (right_cmd>0)? right_fwd : !right_fwd;
   bool left_dir = (left_cmd>0)? left_fwd : !left_fwd;
 
