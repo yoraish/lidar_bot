@@ -1,0 +1,6 @@
+<launch>
+  <!-- Launch the wall follower with parameters -->
+  <node pkg="wall_follower" name="wall_follower" type="wall_follower.py" output="screen">
+    <rosparam command="load" file="$(find wall_follower)/params.yaml"/>
+  </node>
+</launch>
