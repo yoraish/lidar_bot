@@ -17,7 +17,7 @@ class WallFollower:
     SCAN_TOPIC = "/scan"
     DRIVE_TOPIC = "cmd_vel"
     SIDE = -1 # -1 right is and +1 is left
-    VELOCITY = 1.6
+    VELOCITY = 0.6
     DESIRED_DISTANCE = 0.5
 
     def __init__(self):
