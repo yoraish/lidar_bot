@@ -1,5 +1,0 @@
-scan_topic: "/scan"
-drive_topic: "/cmd_vel"
-side: -1
-velocity: 0.5
-desired_distance: 0.5
