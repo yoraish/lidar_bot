@@ -1,0 +1,5 @@
+*.pyc
+*.swp
+rosserial_server/doc/
+*.out
+*.geany
