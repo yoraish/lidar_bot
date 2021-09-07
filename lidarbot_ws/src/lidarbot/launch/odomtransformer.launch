@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+
+	<node name="odomtransformer" pkg="lidarbot" type="odomtransformer.py" output="screen">
+		<param name="odom_input" value="/scanmatch_odom" />
+		<param name="tf_output" value="/base_link" />
+	</node>
+
+</launch>
