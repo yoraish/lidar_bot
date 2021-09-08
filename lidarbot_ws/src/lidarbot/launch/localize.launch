@@ -1,31 +1,5 @@
 <launch>
 
-	<!-- <master auto="start"/> -->
-	<!--Our frames:
-		On the robot and rigid:
-			base_footprint
-			base_link
-			scanmatcher_frame (from hector, will be changed.)
-			laser_frame
-
-		Off robot:
-			odom_frame (called mapcurrent_frame, later change that to mapcurrent_odom from hector's "odom_frame")
-			map_frame
-	
-	
-	Our trasforms:
-		scanmatcher_frame              -> base_footprint (0 0 0 0 0 0 )
-		base_footprint                 -> base_link (rigid 0 0 0 0 0 0).
-		base_link 					   -> laser_frame (rigid 0 0 0 0 0 0).
-		map_frame                      -> mapcurrent_frame (amcl)
-		mapcurrent_frame               -> scanmatcher_frame (hector)
-
-	Our odom frame is mapcurrent_frame.
-
-	Need to install amcl.
-	sudo apt install ros-kinetic-amcl
-	Many thanks to https://github.com/ne0h/hmmwv/tree/master/ros_workspace/src/hmmwv
-	 -->
 	<!-- Run teleop -->
     <include file="$(find lidarbot)/launch/lidarbot_teleop.launch"/>
 
