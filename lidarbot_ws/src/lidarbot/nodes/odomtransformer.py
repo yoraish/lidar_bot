@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import rospy, tf, tf2_ros, geometry_msgs.msg, nav_msgs.msg
+# This node is the work of https://github.com/ne0h/hmmwv/blob/hmmwv2/ros_workspace/src/hmmwv/nodes/odomtransformer.py 
 
 def callback(data, args):
 	bc = tf2_ros.TransformBroadcaster()
