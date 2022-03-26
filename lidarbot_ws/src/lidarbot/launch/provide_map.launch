@@ -1,0 +1,7 @@
+<launch>
+	<!-- <arg name="map_fname" value="/home/ubuntu/catkin_ws/src/lidarbot/maps/corridor_map.yaml"> </arg> -->
+	<arg name="map_fname" value="/home/ubuntu/catkin_ws/src/lidarbot/maps/room_map2.yaml"> </arg>
+	<node pkg="map_server" type="map_server" name="map_server" args="$(arg map_fname)">
+	
+	</node>
+</launch>
